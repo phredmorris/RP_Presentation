@@ -4,43 +4,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rosana Paulino | Interactive Exhibition</title>
+    <title>Rosana Paulino | Myth, Nature, and Memory</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Miss+Fajardose&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     <style>
-        /* Define our Rosana Paulino-inspired color palette */
         :root {
             --bg-parchment: #f4efe8;
             --text-charcoal: #2c2a29;
-            --red-thread: #b22222;
-            /* Deep red for signature stitching */
-            --sepia-tone: #8b7355;
+            --thread: #ffc400;
+            --canvas-white: #f4efe8;
+            --font-script: "Miss Fajardose", cursive;
+            --font-display: "Funnel Display", sans-serif;
+
+            /* These update dynamically via JavaScript to move the gradient */
+            --cursor-x: 50vw;
+            --cursor-y: 50vh;
         }
 
         body,
         html {
             margin: 0;
             padding: 0;
+
+            /* TACTILE PARCHMENT BASE WITH DRIFTING GRADIENT */
             background-color: var(--bg-parchment);
+            background-image:
+                /* 1. Full Opacity Grain Layer */
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E"),
+                /* 2. Ash-Black Gradient bound to the JS cursor coordinates */
+                radial-gradient(circle 600px at var(--cursor-x) var(--cursor-y), rgb(255, 0, 0) 0%, rgb(0, 0, 0) 100%);
+
+            background-repeat: repeat, no-repeat;
+            background-attachment: fixed;
+
+            /* RESTORED: This forces the noise SVG to tile at a tiny size, making the grain fine and dense */
+            background-size: 100px 100px, 100% 100%;
+
             color: var(--text-charcoal);
-            font-family: 'Georgia', serif;
+            font-family: var(--font-display);
             overflow-x: hidden;
-            /* Prevents accidental side-scrolling */
+            position: relative;
         }
 
-        /* The continuous red stitch down the center */
+        h1 {
+            /* 1. Base Text Color: We use a translucent ash black ( charcoal with alpha) */
+            /* This makes the text itself soft and blended with the parchment. */
+            color: rgba(44, 42, 41, 0.7);
+            font-family: var(--font-script);
+            font-size: 15rem;
+            /* Hex #2c2a29 with 70% opacity */
+
+            /* 2. Hazy, Shrouded Look using CSS Filters */
+            /* opacity blends the text into the background grain. */
+            /* blur(1px) creates the initial "shrouded" or hazy effect over the whole element. */
+            filter: blur(1.1px) opacity(0.8);
+
+            /* 3. Matching Shrouded Glow using text-shadow */
+            /* We use multiple, increasing blur radii to create a soft haze. */
+            /* Note that the colors match the translucent text color for a consistent look. */
+            text-shadow:
+                0 0 3px rgba(44, 42, 41, 0.5),
+                /* Tight, inner haze */
+                0 0 10px rgba(44, 42, 41, 0.4),
+                /* Mid-level shroud */
+                0 0 25px rgba(44, 42, 41, 0.3);
+            /* Spreading, soft haze */
+
+            /* 4. Stop fast vibrations and glows to lower the energy. */
+            animation: none;
+            /* Disables any previous vibrating/high-energy animations */
+
+            /* Ensure display and margins from your setup remain. */
+            display: inline-block;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+
+        /* --- THE VIBRATING GLOW KEYFRAMES --- */
+        @keyframes gritty-vibrate {
+
+            0%,
+            100% {
+                text-shadow:
+                    0.5px 0.5px 1px var(--text-charcoal),
+                    -1px -1px 2px var(--thread),
+                    2px 2px 8px var(--thread);
+                transform: translate(0, 0);
+            }
+
+            25% {
+                text-shadow:
+                    -0.5px -1px 1px var(--text-charcoal),
+                    2px -0.5px 3px var(--thread),
+                    -3px 1px 12px var(--thread);
+                transform: translate(-1px, 0.5px);
+            }
+
+            50% {
+                text-shadow:
+                    1px -0.5px 2px var(--text-charcoal),
+                    -2px 2px 1px var(--thread),
+                    1px -2px 10px var(--thread);
+                transform: translate(0.5px, -1px);
+            }
+
+            75% {
+                text-shadow:
+                    -1px 1px 1px var(--text-charcoal),
+                    1px 1.5px 2px var(--thread),
+                    -1px 3px 15px var(--thread);
+                transform: translate(1px, 1px);
+            }
+        }
+
+        h2,
+        .subtitle,
+        strong {
+            font-family: var(--font-display);
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            margin-top: -2rem;
+            position: relative;
+            z-index: 2;
+        }
+
         .central-thread {
-            position: fixed;
+            position: absolute;
             top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 100vh;
-            border-left: 2px dashed var(--red-thread);
+            left: 0;
+            width: 100%;
             z-index: 0;
-            opacity: 0.4;
+            opacity: 0.5;
+            pointer-events: none;
         }
 
-        /* Main content wrapper */
+        #clip-rect {
+            transition: height 0.4s ease-out;
+        }
+
         main {
             position: relative;
             z-index: 1;
@@ -54,123 +164,277 @@
             align-items: center;
             padding: 2rem;
             text-align: center;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        /* Styling for the collage container */
-        .collage-container {
+        .showcase-container {
             position: relative;
-            width: 80vw;
-            height: 60vh;
-            max-width: 800px;
+            width: 90vw;
+            max-width: 650px;
+            margin: 0 auto;
         }
 
-        /* Base styling for collage pieces BEFORE they animate in */
-        .collage-piece {
-            position: absolute;
-            background-color: var(--sepia-tone);
-            color: var(--bg-parchment);
-            padding: 1rem;
-            border: 1px solid var(--text-charcoal);
-            box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
-
-            /* Animation setup: start hidden and slightly pushed down */
+        .showcase-piece {
+            background-color: var(--bg-parchment);
+            padding: 20px;
+            border: 2px solid var(--text-charcoal);
             opacity: 0;
-            transform: translateY(40px) rotate(-3deg);
-            transition: all 1s ease-out;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
         }
 
-        /* Animation ending state: triggered by JavaScript adding the 'visible' class */
-        .collage-piece.visible {
+        .swiper {
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            transition: height 0.3s ease-in-out;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: var(--thread) !important;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            color: var(--text-charcoal) !important;
+            transform: scale(1.1);
+        }
+
+        .swiper-pagination-bullet {
+            background: var(--thread) !important;
+            opacity: 0.4;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1.0;
+            background: var(--thread) !important;
+        }
+
+        .piece-description {
+            padding-top: 20px;
+            border-top: 2px dashed var(--thread);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            text-align: left;
+        }
+
+        .showcase-piece.visible {
             opacity: 1;
-            transform: translateY(0) rotate(0deg);
+            transform: translateY(0);
         }
 
-        /* Staggering the animations so they don't appear all at once */
-        .piece-1.visible {
-            transition-delay: 0.1s;
+        .conclusion h2 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            margin-top: 0;
         }
 
-        .piece-2.visible {
-            transition-delay: 0.4s;
-        }
-
-        .piece-3.visible {
-            transition-delay: 0.7s;
-        }
-
-        /* Positioning the pieces randomly for a collage feel */
-        .piece-1 {
-            top: 10%;
-            left: 10%;
-            width: 200px;
-            height: 250px;
-        }
-
-        .piece-2 {
-            bottom: 10%;
-            right: 10%;
-            width: 250px;
-            height: 180px;
-        }
-
-        .piece-3 {
-            top: 40%;
-            left: 40%;
-            width: 150px;
-            border: 2px dashed var(--red-thread);
-            background: var(--bg-parchment);
-            color: var(--text-charcoal);
+        .conclusion p {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 0;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="central-thread"></div>
+    <svg class="central-thread" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <clipPath id="thread-clip">
+                <rect id="clip-rect" x="0" y="0" width="100%" height="0" />
+            </clipPath>
+        </defs>
+
+        <path id="left-path" clip-path="url(#thread-clip)" fill="none" stroke="var(--thread)" stroke-width="3.5"
+            stroke-dasharray="8 8" />
+        <path id="right-path" clip-path="url(#thread-clip)" fill="none" stroke="var(--thread)" stroke-width="3.5"
+            stroke-dasharray="8 8" />
+    </svg>
 
     <main>
         <section class="scroll-section intro">
             <h1>Rosana Paulino</h1>
-            <p class="subtitle">A tapestry of history, memory, and identity.</p>
+            <p class="subtitle">Roots, Myth, and the Black Female Body.</p>
         </section>
 
-        <section class="scroll-section collage-section">
-            <div class="collage-container">
-                <div class="collage-piece piece-1">Archival Image 1</div>
-                <div class="collage-piece piece-2">Archival Image 2</div>
-                <div class="collage-piece piece-3">Stitched Fragment</div>
+        <section class="scroll-section showcase-section">
+            <div class="showcase-container">
+                <div class="showcase-piece">
+                    <div class="swiper mySwiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide"><img
+                                    src="https://studiomuseum.imgix.net/images/G%C3%AAmeas-from-the-Jatob%C3%A1s-series.jpg"
+                                    alt="Jatobás series - detail 1"></div>
+                            <div class="swiper-slide"><img
+                                    src="https://studiomuseum.imgix.net/images/G%C3%AAmeas-from-the-Jatob%C3%A1s-series_2025-10-26-032619_efaw.jpg"
+                                    alt="Jatobás series - detail 2"></div>
+                            <div class="swiper-slide"><img
+                                    src="https://studiomuseum.imgix.net/images/G%C3%AAmeas-from-the-Jatob%C3%A1s-series_2025-10-26-032620_uyat.jpg"
+                                    alt="Jatobás series - detail 3"></div>
+                            <div class="swiper-slide"><img
+                                    src="https://studiomuseum.imgix.net/images/G%C3%AAmeas-from-the-Jatob%C3%A1s-series_2025-10-26-032622_vkcj.jpg"
+                                    alt="Jatobás series - detail 4"></div>
+                            <div class="swiper-slide"><img
+                                    src="https://studiomuseum.imgix.net/images/G%C3%AAmeas-from-the-Jatob%C3%A1s-series_2025-10-26-032624_qvcb.jpg"
+                                    alt="Jatobás series - detail 5"></div>
+                            <div class="swiper-slide"><img
+                                    src="https://studiomuseum.imgix.net/images/G%C3%AAmeas-from-the-Jatob%C3%A1s-series_2025-11-02-033230_mqau.jpg"
+                                    alt="Jatobás series - detail 6"></div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+                    <div class="piece-description">
+                        <strong>Jatobás Series (Gêmeas)</strong><br><br>
+                        Paulino intertwines the Black female body with the roots of the resilient Jatobá tree. This
+                        piece speaks to ancestral spirituality and profound strength, portraying women not merely as
+                        survivors, but as the deeply rooted, foundational pillars of the earth. The exposed roots
+                        challenge colonial stereotypes that sought to uproot and displace Afro-descendant identities,
+                        instead anchoring them firmly into the history and soil of the Americas.
+                    </div>
+                </div>
             </div>
         </section>
 
         <section class="scroll-section conclusion">
-            <p>More sections can be "stitched" here.</p>
+            <h2>"My work is a suture."</h2>
+            <p>- Rosana Paulino</p>
         </section>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
     <script>
-        // 1. We create an observer to watch for when elements enter the screen
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                // 2. If the collage section crosses our screen threshold...
-                if (entry.isIntersecting) {
-                    // 3. Find all the collage pieces inside it
-                    const pieces = entry.target.querySelectorAll('.collage-piece');
-                    // 4. Add the 'visible' class to trigger the CSS animation
-                    pieces.forEach(piece => {
-                        piece.classList.add('visible');
-                    });
-                }
-            });
-        }, {
-            // This means the animation triggers when 30% of the section is visible
-            threshold: 0.3
+        // --- 1. INITIALIZE CAROUSEL ---
+        const swiper = new Swiper('.mySwiper', {
+            loop: true,
+            autoHeight: true,
+            pagination: { el: '.swiper-pagination', clickable: true, },
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev', },
         });
 
-        // 5. Tell the observer specifically to watch our collage section
-        const collageSection = document.querySelector('.collage-section');
-        if (collageSection) {
-            observer.observe(collageSection);
+        // --- 2. SCROLL ANIMATION FOR ARTWORK ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const piece = entry.target.querySelector('.showcase-piece');
+                    if (piece) piece.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+
+        const showcaseSection = document.querySelector('.showcase-section');
+        if (showcaseSection) observer.observe(showcaseSection);
+
+        // --- 3. GENERATE & ANIMATE 2 SMOOTH MEANDERING THREADS ---
+        function generatePlayfulPath(baseX, docHeight, isLeft) {
+            let d = `M ${baseX} 0`;
+            let y = 0;
+            let out = isLeft ? -1 : 1;
+
+            while (y < docHeight) {
+                if (y > 300 && Math.random() < 0.04 && (docHeight - y) > 500) {
+                    let scale = 0.6 + Math.random() * 0.9;
+                    let currentX = baseX + (Math.sin(y / 150) * 15 + Math.sin(y / 400) * 25);
+
+                    // Pin the needle exactly on the meander line
+                    d += ` L ${currentX} ${y}`;
+
+                    // Perfectly aligned mathematically smooth C1 Loop
+                    // Exits straight down, crosses over, and returns straight down
+                    d += ` c 0 ${60 * scale}, ${out * 100 * scale} ${100 * scale}, ${out * 100 * scale} ${30 * scale} `;
+                    d += ` c 0 ${-70 * scale}, ${-out * 100 * scale} ${-70 * scale}, ${-out * 100 * scale} ${50 * scale}`;
+
+                    y += 80 * scale;
+                    y += 350;
+                } else {
+                    let sway = Math.sin(y / 150) * 15 + Math.sin(y / 400) * 25;
+                    let x = baseX + sway;
+                    d += ` L ${x} ${y}`;
+                    y += 20;
+                }
+            }
+            return d;
         }
+
+        function generateThread() {
+            const svg = document.querySelector('.central-thread');
+            const docHeight = document.body.scrollHeight;
+            const windowWidth = window.innerWidth;
+
+            svg.style.height = docHeight + 'px';
+            document.getElementById('left-path').setAttribute('d', generatePlayfulPath(windowWidth * 0.10, docHeight, true));
+            document.getElementById('right-path').setAttribute('d', generatePlayfulPath(windowWidth * 0.90, docHeight, false));
+        }
+
+        function updateThreadReveal() {
+            let scrollY = window.scrollY;
+            if (scrollY === 0) {
+                document.getElementById('clip-rect').setAttribute('height', 0);
+            } else {
+                let zipAhead = Math.min(scrollY * 8, window.innerHeight);
+                document.getElementById('clip-rect').setAttribute('height', scrollY + zipAhead);
+            }
+        }
+
+        window.addEventListener('scroll', updateThreadReveal);
+        window.addEventListener('load', () => {
+            generateThread();
+            updateThreadReveal();
+        });
+        window.addEventListener('resize', () => {
+            generateThread();
+            updateThreadReveal();
+        });
+
+        // --- 4. DRIFTING GRADIENT MOUSE TRACKER ---
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let currentX = mouseX;
+        let currentY = mouseY;
+        let time = 0;
+
+        // Track where the user moves the mouse
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateGradient() {
+            time += 0.005; // Controls the speed of the "drift"
+
+            // 1. Smoothly follow the mouse
+            currentX += (mouseX - currentX) * 0.05;
+            currentY += (mouseY - currentY) * 0.05;
+
+            // 2. Add organic, meandering drift to the position
+            const driftX = Math.sin(time) * 150;
+            const driftY = Math.cos(time * 0.8) * 150;
+
+            const finalX = currentX + driftX;
+            const finalY = currentY + driftY;
+
+            // 3. Update the CSS variables mapped to the radial gradient
+            document.documentElement.style.setProperty('--cursor-x', `${finalX}px`);
+            document.documentElement.style.setProperty('--cursor-y', `${finalY}px`);
+
+            requestAnimationFrame(animateGradient);
+        }
+
+        // Start the background loop
+        animateGradient();
     </script>
 </body>
 
