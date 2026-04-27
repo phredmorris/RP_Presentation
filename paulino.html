@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rosana Paulino | Interactive Exhibition</title>
+
+    <style>
+        /* Define our Rosana Paulino-inspired color palette */
+        :root {
+            --bg-parchment: #f4efe8;
+            --text-charcoal: #2c2a29;
+            --red-thread: #b22222;
+            /* Deep red for signature stitching */
+            --sepia-tone: #8b7355;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-parchment);
+            color: var(--text-charcoal);
+            font-family: 'Georgia', serif;
+            overflow-x: hidden;
+            /* Prevents accidental side-scrolling */
+        }
+
+        /* The continuous red stitch down the center */
+        .central-thread {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100vh;
+            border-left: 2px dashed var(--red-thread);
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        /* Main content wrapper */
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        .scroll-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* Styling for the collage container */
+        .collage-container {
+            position: relative;
+            width: 80vw;
+            height: 60vh;
+            max-width: 800px;
+        }
+
+        /* Base styling for collage pieces BEFORE they animate in */
+        .collage-piece {
+            position: absolute;
+            background-color: var(--sepia-tone);
+            color: var(--bg-parchment);
+            padding: 1rem;
+            border: 1px solid var(--text-charcoal);
+            box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+
+            /* Animation setup: start hidden and slightly pushed down */
+            opacity: 0;
+            transform: translateY(40px) rotate(-3deg);
+            transition: all 1s ease-out;
+        }
+
+        /* Animation ending state: triggered by JavaScript adding the 'visible' class */
+        .collage-piece.visible {
+            opacity: 1;
+            transform: translateY(0) rotate(0deg);
+        }
+
+        /* Staggering the animations so they don't appear all at once */
+        .piece-1.visible {
+            transition-delay: 0.1s;
+        }
+
+        .piece-2.visible {
+            transition-delay: 0.4s;
+        }
+
+        .piece-3.visible {
+            transition-delay: 0.7s;
+        }
+
+        /* Positioning the pieces randomly for a collage feel */
+        .piece-1 {
+            top: 10%;
+            left: 10%;
+            width: 200px;
+            height: 250px;
+        }
+
+        .piece-2 {
+            bottom: 10%;
+            right: 10%;
+            width: 250px;
+            height: 180px;
+        }
+
+        .piece-3 {
+            top: 40%;
+            left: 40%;
+            width: 150px;
+            border: 2px dashed var(--red-thread);
+            background: var(--bg-parchment);
+            color: var(--text-charcoal);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="central-thread"></div>
+
+    <main>
+        <section class="scroll-section intro">
+            <h1>Rosana Paulino</h1>
+            <p class="subtitle">A tapestry of history, memory, and identity.</p>
+        </section>
+
+        <section class="scroll-section collage-section">
+            <div class="collage-container">
+                <div class="collage-piece piece-1">Archival Image 1</div>
+                <div class="collage-piece piece-2">Archival Image 2</div>
+                <div class="collage-piece piece-3">Stitched Fragment</div>
+            </div>
+        </section>
+
+        <section class="scroll-section conclusion">
+            <p>More sections can be "stitched" here.</p>
+        </section>
+    </main>
+
+    <script>
+        // 1. We create an observer to watch for when elements enter the screen
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // 2. If the collage section crosses our screen threshold...
+                if (entry.isIntersecting) {
+                    // 3. Find all the collage pieces inside it
+                    const pieces = entry.target.querySelectorAll('.collage-piece');
+                    // 4. Add the 'visible' class to trigger the CSS animation
+                    pieces.forEach(piece => {
+                        piece.classList.add('visible');
+                    });
+                }
+            });
+        }, {
+            // This means the animation triggers when 30% of the section is visible
+            threshold: 0.3
+        });
+
+        // 5. Tell the observer specifically to watch our collage section
+        const collageSection = document.querySelector('.collage-section');
+        if (collageSection) {
+            observer.observe(collageSection);
+        }
+    </script>
+</body>
+
+</html>
