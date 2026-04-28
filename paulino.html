@@ -53,74 +53,21 @@
         }
 
         h1 {
-            /* 1. Base Text Color: We use a translucent ash black ( charcoal with alpha) */
-            /* This makes the text itself soft and blended with the parchment. */
             color: rgba(44, 42, 41, 0.7);
             font-family: var(--font-script);
             font-size: 15rem;
-            /* Hex #2c2a29 with 70% opacity */
 
-            /* 2. Hazy, Shrouded Look using CSS Filters */
-            /* opacity blends the text into the background grain. */
-            /* blur(1px) creates the initial "shrouded" or hazy effect over the whole element. */
             filter: blur(1.1px) opacity(0.8);
 
-            /* 3. Matching Shrouded Glow using text-shadow */
-            /* We use multiple, increasing blur radii to create a soft haze. */
-            /* Note that the colors match the translucent text color for a consistent look. */
             text-shadow:
                 0 0 3px rgba(44, 42, 41, 0.5),
-                /* Tight, inner haze */
                 0 0 10px rgba(44, 42, 41, 0.4),
-                /* Mid-level shroud */
                 0 0 25px rgba(44, 42, 41, 0.3);
-            /* Spreading, soft haze */
 
-            /* 4. Stop fast vibrations and glows to lower the energy. */
             animation: none;
-            /* Disables any previous vibrating/high-energy animations */
-
-            /* Ensure display and margins from your setup remain. */
             display: inline-block;
             margin-bottom: 0;
             margin-top: 0;
-        }
-
-        /* --- THE VIBRATING GLOW KEYFRAMES --- */
-        @keyframes gritty-vibrate {
-
-            0%,
-            100% {
-                text-shadow:
-                    0.5px 0.5px 1px var(--text-charcoal),
-                    -1px -1px 2px var(--thread),
-                    2px 2px 8px var(--thread);
-                transform: translate(0, 0);
-            }
-
-            25% {
-                text-shadow:
-                    -0.5px -1px 1px var(--text-charcoal),
-                    2px -0.5px 3px var(--thread),
-                    -3px 1px 12px var(--thread);
-                transform: translate(-1px, 0.5px);
-            }
-
-            50% {
-                text-shadow:
-                    1px -0.5px 2px var(--text-charcoal),
-                    -2px 2px 1px var(--thread),
-                    1px -2px 10px var(--thread);
-                transform: translate(0.5px, -1px);
-            }
-
-            75% {
-                text-shadow:
-                    -1px 1px 1px var(--text-charcoal),
-                    1px 1.5px 2px var(--thread),
-                    -1px 3px 15px var(--thread);
-                transform: translate(1px, 1px);
-            }
         }
 
         h2,
@@ -173,6 +120,27 @@
             width: 90vw;
             max-width: 650px;
             margin: 0 auto;
+        }
+
+        /* NEW: Styling for the biographical text block to match the image piece */
+        .text-block {
+            background-color: var(--bg-parchment);
+            padding: 30px;
+            border: 2px solid var(--text-charcoal);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+            text-align: left;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .text-block h2 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            border-bottom: 2px dashed var(--thread);
+            padding-bottom: 10px;
         }
 
         .showcase-piece {
@@ -228,7 +196,9 @@
             text-align: left;
         }
 
-        .showcase-piece.visible {
+        /* Shared visibility class for smooth scroll reveals */
+        .showcase-piece.visible,
+        .text-block.visible {
             opacity: 1;
             transform: translateY(0);
         }
@@ -265,10 +235,29 @@
     <main>
         <section class="scroll-section intro">
             <h1>Rosana Paulino</h1>
-            <p class="subtitle">Roots, Myth, and the Black Female Body.</p>
+            <p class="subtitle">Systemic Memory, Botanical Metaphor, and the Black Female Body.</p>
         </section>
 
-        <section class="scroll-section showcase-section">
+        <section class="scroll-section">
+            <div class="showcase-container">
+                <div class="text-block">
+                    <h2>The Artist and The Archive</h2>
+                    <p>Born in 1967 in São Paulo, Brazil, Rosana Paulino’s visual language is inextricably linked to her
+                        upbringing in a working-class family, surrounded by women engaged in the domestic labor of
+                        sewing. This early exposure transformed the thread from a tool of domesticity into a profound
+                        conceptual instrument. As the first Black woman to earn a PhD in Visual Arts from the University
+                        of São Paulo, her work operates at the intersection of material practice and rigorous academic
+                        research.</p>
+                    <p style="margin-bottom: 0;">Her portfolio actively deconstructs 19th-century European
+                        pseudoscientific archives—such as the ethnographic photography generated by the Agassiz
+                        expedition—which sought to biologically classify and subordinate Black bodies. Paulino utilizes
+                        the "suture" to mend these violent historical fractures, rejecting the colonial gaze and
+                        reclaiming agency over Afro-Brazilian representation.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="scroll-section">
             <div class="showcase-container">
                 <div class="showcase-piece">
                     <div class="swiper mySwiper">
@@ -298,11 +287,14 @@
                     </div>
                     <div class="piece-description">
                         <strong>Jatobás Series (Gêmeas)</strong><br><br>
-                        Paulino intertwines the Black female body with the roots of the resilient Jatobá tree. This
-                        piece speaks to ancestral spirituality and profound strength, portraying women not merely as
-                        survivors, but as the deeply rooted, foundational pillars of the earth. The exposed roots
-                        challenge colonial stereotypes that sought to uproot and displace Afro-descendant identities,
-                        instead anchoring them firmly into the history and soil of the Americas.
+                        Produced during a period of intensifying environmental exploitation and socio-political
+                        polarization in Brazil, the <em>Jatobás</em> series represents a sharp analytical pivot toward
+                        ecofeminism and structural critique. Paulino merges human anatomy with the robust, rhizomatic
+                        roots of the sacred Brazilian Jatobá tree. <br><br>
+                        By reappropriating the detached visual language of classical botanical illustrations, she
+                        challenges biological determinism. The exposed roots do not signify displacement or
+                        vulnerability; rather, they serve as a visual taxonomy of survival, positioning the Black woman
+                        as the immovable, foundational anchor of the socio-ecological landscape.
                     </div>
                 </div>
             </div>
@@ -325,18 +317,23 @@
             navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev', },
         });
 
-        // --- 2. SCROLL ANIMATION FOR ARTWORK ---
+        // --- 2. SCROLL ANIMATION FOR ARTWORK & TEXT BLOCKS ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
+                    // Check for both the image piece and the new text block
                     const piece = entry.target.querySelector('.showcase-piece');
+                    const textBlock = entry.target.querySelector('.text-block');
+
                     if (piece) piece.classList.add('visible');
+                    if (textBlock) textBlock.classList.add('visible');
                 }
             });
         }, { threshold: 0.2 });
 
-        const showcaseSection = document.querySelector('.showcase-section');
-        if (showcaseSection) observer.observe(showcaseSection);
+        // Observe all sections so animations trigger as you scroll down
+        const scrollSections = document.querySelectorAll('.scroll-section');
+        scrollSections.forEach(section => observer.observe(section));
 
         // --- 3. GENERATE & ANIMATE 2 SMOOTH MEANDERING THREADS ---
         function generatePlayfulPath(baseX, docHeight, isLeft) {
@@ -349,11 +346,8 @@
                     let scale = 0.6 + Math.random() * 0.9;
                     let currentX = baseX + (Math.sin(y / 150) * 15 + Math.sin(y / 400) * 25);
 
-                    // Pin the needle exactly on the meander line
                     d += ` L ${currentX} ${y}`;
 
-                    // Perfectly aligned mathematically smooth C1 Loop
-                    // Exits straight down, crosses over, and returns straight down
                     d += ` c 0 ${60 * scale}, ${out * 100 * scale} ${100 * scale}, ${out * 100 * scale} ${30 * scale} `;
                     d += ` c 0 ${-70 * scale}, ${-out * 100 * scale} ${-70 * scale}, ${-out * 100 * scale} ${50 * scale}`;
 
@@ -406,38 +400,31 @@
         let currentY = mouseY;
         let time = 0;
 
-        // Track where the user moves the mouse
         window.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
         });
 
         function animateGradient() {
-            time += 0.005; // Controls the speed of the "drift"
+            time += 0.005;
 
-            // 1. Smoothly follow the mouse
             currentX += (mouseX - currentX) * 0.05;
             currentY += (mouseY - currentY) * 0.05;
 
-            // 2. Add organic, meandering drift to the position
             const driftX = Math.sin(time) * 150;
             const driftY = Math.cos(time * 0.8) * 150;
 
             const finalX = currentX + driftX;
             const finalY = currentY + driftY;
 
-            // 3. Update the CSS variables mapped to the radial gradient
             document.documentElement.style.setProperty('--cursor-x', `${finalX}px`);
             document.documentElement.style.setProperty('--cursor-y', `${finalY}px`);
 
             requestAnimationFrame(animateGradient);
         }
 
-        // Start the background loop
         animateGradient();
     </script>
 </body>
-
-
 
 </html>
