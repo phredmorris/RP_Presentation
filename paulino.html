@@ -27,8 +27,13 @@
             --cursor-y: 50vh;
         }
 
-        body,
+        /* FIXED: Separated html from body to prevent double scrollbars */
         html {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
             margin: 0;
             padding: 0;
 
@@ -55,7 +60,11 @@
         h1 {
             color: rgba(44, 42, 41, 0.7);
             font-family: var(--font-script);
-            font-size: 15rem;
+
+            /* RESPONSIVE: Fluidly scales from 5rem on mobile to 15rem on desktop */
+            font-size: clamp(5rem, 20vw, 15rem);
+            line-height: 1;
+            /* Reset for clean spacing */
 
             filter: blur(1.1px) opacity(0.8);
 
@@ -66,8 +75,8 @@
 
             animation: none;
             display: inline-block;
-            margin-bottom: 0;
-            margin-top: 0;
+            margin: 0;
+            /* Reset margins for even spacing */
         }
 
         h2,
@@ -79,9 +88,10 @@
         }
 
         .subtitle {
-            margin-top: -2rem;
+            margin: 1rem 0 0 0;
             position: relative;
             z-index: 2;
+            padding: 0 1rem;
         }
 
         .central-thread {
@@ -109,7 +119,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 2rem;
+            padding: 2rem 1rem;
             text-align: center;
             width: 100%;
             box-sizing: border-box;
@@ -117,12 +127,12 @@
 
         .showcase-container {
             position: relative;
-            width: 90vw;
+            width: 100%;
             max-width: 650px;
             margin: 0 auto;
+            box-sizing: border-box;
         }
 
-        /* NEW: Styling for the biographical text block to match the image piece */
         .text-block {
             background-color: var(--bg-parchment);
             padding: 30px;
@@ -133,12 +143,13 @@
             text-align: left;
             font-size: 1.1rem;
             line-height: 1.7;
+            box-sizing: border-box;
         }
 
         .text-block h2 {
             margin-top: 0;
             margin-bottom: 1rem;
-            font-size: 2rem;
+            font-size: clamp(1.5rem, 6vw, 2rem);
             border-bottom: 2px dashed var(--thread);
             padding-bottom: 10px;
         }
@@ -150,6 +161,7 @@
             opacity: 0;
             transform: translateY(50px);
             transition: all 0.8s ease-out;
+            box-sizing: border-box;
         }
 
         .swiper {
@@ -196,7 +208,6 @@
             text-align: left;
         }
 
-        /* Shared visibility class for smooth scroll reveals */
         .showcase-piece.visible,
         .text-block.visible {
             opacity: 1;
@@ -204,15 +215,26 @@
         }
 
         .conclusion h2 {
-            font-size: 3rem;
+            font-size: clamp(2rem, 8vw, 3rem);
             margin-bottom: 0.5rem;
             margin-top: 0;
         }
 
         .conclusion p {
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 5vw, 1.5rem);
             margin-top: 0;
             margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .scroll-section {
+                padding: 1rem;
+            }
+
+            .text-block {
+                padding: 20px;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -321,7 +343,6 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Check for both the image piece and the new text block
                     const piece = entry.target.querySelector('.showcase-piece');
                     const textBlock = entry.target.querySelector('.text-block');
 
@@ -331,7 +352,6 @@
             });
         }, { threshold: 0.2 });
 
-        // Observe all sections so animations trigger as you scroll down
         const scrollSections = document.querySelectorAll('.scroll-section');
         scrollSections.forEach(section => observer.observe(section));
 
@@ -393,7 +413,7 @@
             updateThreadReveal();
         });
 
-        // --- 4. DRIFTING GRADIENT MOUSE TRACKER ---
+        // --- 4. DRIFTING GRADIENT MOUSE & TOUCH TRACKER ---
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
         let currentX = mouseX;
@@ -403,6 +423,11 @@
         window.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            mouseX = e.touches[0].clientX;
+            mouseY = e.touches[0].clientY;
         });
 
         function animateGradient() {
